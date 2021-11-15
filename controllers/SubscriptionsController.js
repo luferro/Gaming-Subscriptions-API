@@ -16,8 +16,8 @@ export const getXboxGamePass = async(req, res) => {
         const page = await browser.newPage();
         await page.goto('https://www.xbox.com/pt-PT/xbox-game-pass/games', { waitUntil: 'networkidle0' });
 
-        await page.waitForSelector(`[data-theplat="${type}"]`);
-        await page.click(`[data-theplat="${type}"]`);
+        platform === 'pc' && await page.waitForSelector(`[data-theplat="pc"]`);
+        platform === 'pc' && await page.click(`[data-theplat="pc"]`);
         
         const items = [];
         let hasMore = true;
@@ -55,8 +55,8 @@ export const getUbisoftPlus = async(req, res) => {
         let hasMore = true;
         while(hasMore) {
             await page.waitForTimeout(1000);
-            hasMore = (await page.$$('main > :last-child > :last-child > :nth-child(4) > button')).length > 0;
-            if(hasMore) await page.click('main > :last-child > :last-child > :nth-child(4) > button');
+            hasMore = (await page.$$('main > :last-child > :first-child > :last-child > :nth-child(4) > button')).length > 0;
+            if(hasMore) await page.click('main > :last-child > :first-child > :last-child > :nth-child(4) > button');
         }
 
         const data = await page.$$eval('.game-list_inner > div', (elements) =>
@@ -87,6 +87,12 @@ export const getEAPlay = async(req, res) => {
     try {
         const page = await browser.newPage();
         await page.goto(`https://www.origin.com/irl/en-us/store/browse?fq=subscriptionGroup:${subscription_type}`, { waitUntil: 'networkidle0' });
+
+        await page.waitForSelector('.otkmodal-content .otkmodal-content > :last-child > button');
+        await page.click('.otkmodal-content .otkmodal-content > :last-child > button');
+        await page.waitForTimeout(1000);
+        await page.waitForSelector('.otkmodal-content .otkmodal-footer > button');
+        await page.click('.otkmodal-content .otkmodal-footer > button');
 
         await page.evaluate(async() => {
             await new Promise(resolve => {

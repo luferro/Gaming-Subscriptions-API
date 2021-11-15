@@ -7,7 +7,7 @@ export const openBrowser = async() => {
         browser = await puppeteer.launch({ args: ['--no-sandbox'] });
         return browser;
     } catch (error) {
-        console.log(error);   
+        console.log(error);
     }
 }
 
@@ -15,6 +15,6 @@ export const closeBrowser = async() => {
     try {
         await browser.close();
     } catch (error) {
-        console.log(error);   
+        console.log(error);
     }
 }
